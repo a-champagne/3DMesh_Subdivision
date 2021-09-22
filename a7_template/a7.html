@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>CPSC 424 Assignment 7 2019WT1</title>
+    <meta charset="UTF-8">
+    
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  </head>
+  <body>
+    <div class="container">
+      <div class="row" style="margin:20px">
+          <h2>CPSC 424 Assignment 7 Butterfly Subdivision</h2>     
+      </div>
+      <div class="row" style="margin-left: 20px">
+        <div>
+          <input type="file" id="modelFile" class="form-control-file">
+        </div>
+        <div>
+          <div class="input-group input-group-sm mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="inputGroup-sizing-sm">Subdivision Level</span>
+            </div>
+            <input type="text" value="0" id="subdivisionInput" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" style="text-align:right">
+            <button type="button" id="subIncrease" class="btn btn-outline-secondary btn-sm" style="width:25px; background: #E9ECEF">+</button>
+            <button type="button" id="subDecrease" class="btn btn-outline-secondary btn-sm" style="width:25px; background: #E9ECEF">-</button>  
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <canvas id="glCanvas" style="width: 100%; height: 100%">
+        </canvas>
+      </div>
+    </div>
+
+    <script id="vertex-shader" type="x-shader/x-vertex">#version 300 es
+      in vec3 vertexPosition;
+      in vec3 vertexNormal;
+
+      uniform mat4 projectionMatrix;
+      uniform mat4 viewMatrix;
+      uniform mat4 modelMatrix;
+      uniform vec3 lightDirection;
+
+      out vec3 normal;
+      out vec3 lightDir;
+
+      void main() {
+        vec4 nv = viewMatrix * modelMatrix * vec4(vertexNormal, 0.0);
+        normal = vec3(nv);
+
+        vec4 lv = viewMatrix * vec4(lightDirection, 0.0);
+        lightDir = vec3(lv);
+
+        gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(vertexPosition, 1.0);
+      }
+    </script>
+
+    <script id="fragment-shader" type="x-shader/x-fragment">#version 300 es
+      precision highp float;
+      precision highp int;
+
+      uniform vec3 color;
+
+      in vec3 normal;
+      in vec3 lightDir;
+
+      out vec4 out_FragColor; 
+
+      void main() {
+        vec3 diffuse = 0.8 * color * max(0.0, dot(normalize(normal), normalize(lightDir)));
+        vec3 final_color = diffuse + vec3(0.4, 0.4, 0.4);
+        out_FragColor = vec4(final_color, 1.0);
+      }
+    </script>
+
+    <script id="vertex-shader-line" type="x-shader/x-vertex">#version 300 es
+      in vec3 vertexPosition;
+
+      uniform mat4 projectionMatrix;
+      uniform mat4 viewMatrix;
+      uniform mat4 modelMatrix;
+
+      void main() {
+        gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(vertexPosition, 1.0);
+      }
+    </script>
+
+    <script id="fragment-shader-line" type="x-shader/x-fragment">#version 300 es
+      precision highp float;
+      precision highp int;
+
+      uniform vec3 color;
+      out vec4 out_FragColor; 
+
+      void main() {
+        out_FragColor = vec4(color, 1.0);
+      }
+    </script>
+
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+    <script src="js/Vector3D.js"></script>
+    <script src="js/Matrixes.js"></script>
+    <script src="js/WebGL.js"></script>
+    <script src="js/Mesh.js"></script>
+    <script src="js/OBJLoader.js"></script>
+    <script src="js/subdivision.js"></script>
+    <script src="js/main.js"></script>
+
+  </body>
+</html>
