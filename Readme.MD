@@ -13,6 +13,10 @@ A Geometric Modelling Assignment from UBC Computer Science, this web app perform
 * Load an object file
 * Increase or decrease the number of subdivision levels.  Note that on larger meshes, higher degrees of subdivision will require some time to render inititally, however, the code does save the subdivided meshes after initial rendering.
 
+### Examples ###
+![alt text](https://github.com/shell-go/3DMesh_Subdivision/blob/main/img/camel_0.png?raw=true "0 levels of subdivision")
+![alt text](https://github.com/shell-go/3DMesh_Subdivision/blob/main/img/camel_3.png?raw=true "3 levels of subdivision")
+
 
 
 ### Credits ###
